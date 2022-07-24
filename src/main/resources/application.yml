@@ -1,0 +1,16 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://knuser:knuser@cluster0.ne4lixo.mongodb.net/?retryWrites=true&w=majority
+      database: booking
+
+
+kn:
+  cors:
+    url: http://localhost:3000
+
+const:
+  cost:
+    perKg: 2
+    perKm: 100
+    container: 300
