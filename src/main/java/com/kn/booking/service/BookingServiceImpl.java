@@ -30,7 +30,7 @@ public class BookingServiceImpl implements BookingService {
                 .status("200")
                 .dataList(bookingRepository.findAll()
                         .stream()
-                        .map(booking -> new BookingDto(booking))
+                        .map(BookingDto::new)
                         .collect(Collectors.toList()))
                 .build();
     }

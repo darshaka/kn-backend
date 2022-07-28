@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("api/bookings")
+@RequestMapping("/api/bookings")
 public class BookingController {
 
     private BookingService bookingService;
@@ -23,13 +23,13 @@ public class BookingController {
 
     @GetMapping
     @CrossOrigin(origins = "${kn.cors.url}")
-    private ResponseEntity<BaseResponse> getAllBookings() {
+    public ResponseEntity<BaseResponse> getAllBookings() {
         return ResponseEntity.ok(bookingService.getAllBookings());
     }
 
     @PostMapping
-    @CrossOrigin(origins = "http://localhost:3000")
-    private ResponseEntity<BaseResponse> createBookings(@RequestBody CostCalculationPayload payload) {
+    @CrossOrigin(origins = "${kn.cors.url}")
+    public ResponseEntity<BaseResponse> createBookings(@RequestBody CostCalculationPayload payload) {
         return ResponseEntity.ok(bookingService.createBooking(payload));
     }
 }

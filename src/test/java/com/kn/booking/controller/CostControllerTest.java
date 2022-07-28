@@ -1,6 +1,8 @@
 package com.kn.booking.controller;
 
+import com.google.gson.Gson;
 import com.kn.booking.domain.dto.BaseResponse;
+import com.kn.booking.exception.KNException;
 import com.kn.booking.service.CostService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +12,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -62,6 +66,24 @@ class CostControllerTest {
                         .characterEncoding("utf-8")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void calculateCost_exception() throws Exception {
+
+        when(costService.calculateCost(any())).thenThrow(new KNException("Invalid"));
+
+        MvcResult mvcResult = mockMvc.perform(
+                post("/api/cost")
+                        .contentType(MediaType.APPLICATION_JSON).content(getPayload())
+                        .characterEncoding("utf-8")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andReturn();
+
+        String contentAsString = mvcResult.getResponse().getContentAsString();
+        BaseResponse baseResponse = new Gson().fromJson(contentAsString, BaseResponse.class);
+        assertEquals("500", baseResponse.getStatus());
+
     }
 
     private BaseResponse getBaseResponse() {
